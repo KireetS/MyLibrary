@@ -1,11 +1,12 @@
-
 import './App.css';
+import { Navbar } from './Components/Navbar';
+import { Search } from './Components/Search';
 
 function App() {
   return (
     <>
-    <div>
-    </div>
+    <Navbar/>
+    <Search/>
     </>
   );
 }
