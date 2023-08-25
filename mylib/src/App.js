@@ -6,6 +6,7 @@ import DataState from "./Contexts/datafetched/DataState";
 import SpinState from "./Contexts/spin/SpinState";
 import { Route , Routes } from "react-router-dom";
 import { Browse } from "./Components/Browse";
+import { Pagination } from "./Components/Pagination";
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
           <Route exact path = "/" element={<Home/>}/>
           <Route exact path = "/browse" element={<Browse/>}/>
         </Routes>
+      <Pagination/>
       </DataState>
     </SpinState>
     </>
