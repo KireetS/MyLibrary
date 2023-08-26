@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState , useContext } from "react";
+import spinContext from "../Contexts/spin/spinContext";
+import { Spinner } from "./Spinner";
 export const Browse = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
   const [highestRated, setHighestRated] = useState([]);
-
+  const {spin , setSpinone , resetSpin} = useContext(spinContext)
   useEffect(() => {
     fetchBooks(
       "https://www.googleapis.com/books/v1/volumes?q=subject:fiction&orderBy=relevance&startIndex=0&maxResults=12"
@@ -17,12 +18,15 @@ export const Browse = () => {
     fetchBooks(
       "https://www.googleapis.com/books/v1/volumes?q=subject:nonfiction&startIndex=0&maxResults=12"
     ).then((data) => setHighestRated(data));
+    // eslint-disable-next-line
   }, []);
 
   const fetchBooks = async (url) => {
     try {
+      setSpinone(true)
       const response = await fetch(url);
       const data = await response.json();
+      resetSpin(false)
       return data.items || [];
     } catch (error) {
       console.error("error fetching books", error);
@@ -40,6 +44,7 @@ export const Browse = () => {
   const renderBooks = (books) => {
     return (
       <>
+        {spin && <Spinner />}
         {books.map((book, index) => (
           <a
             key={index}

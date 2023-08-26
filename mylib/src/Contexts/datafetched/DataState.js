@@ -4,22 +4,26 @@ import spinContext from "../spin/spinContext";
 const DataState = (props)=>{
   const {setSpinone , resetSpin} = useContext(spinContext)
   const [books, setBooks] = useState([]);
-  const handleClick = async () => {
+  
+  
+  const urlMaker = (searchterm , startIndex)=>{
+    return `https://www.googleapis.com/books/v1/volumes?key=AIzaSyDU1oTCYnVEMMPo_9jfsAohXjwl24Wym5c&startIndex=${Number.parseInt(startIndex)}&maxResults=40&q=${searchterm}`
+  }
+  const [titems,setTitems]  = useState(0)
+  const handleClick = async (start) => {
     let sb = document.getElementById("search-navbar");
     if (sb) {
       console.log(sb.value);
       let s = sb.value;
       s = s.replace(/ /g, "-");
-      console.log(
-        `https://www.googleapis.com/books/v1/volumes?key=AIzaSyCSIjcGWF2bu9EZgr2IWTaAhRJyl8-q9Yg&startIndex=0&maxResults=40&q=${s}`
-      );
+      console.log(urlMaker(s,start));
       try {
         setSpinone(true)
-        const response = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?key=AIzaSyCSIjcGWF2bu9EZgr2IWTaAhRJyl8-q9Yg&startIndex=0&maxResults=40&q=${s}`
-        );
+        const response = await fetch(urlMaker(s , start));
         resetSpin(false)
         const data = await response.json();
+         
+        setTitems(data.totalItems || 0)
         setBooks(data.items || []);
       } catch (err) {
         console.error("this is the error ", err);
@@ -28,8 +32,13 @@ const DataState = (props)=>{
     }
   };
 
+
+
+
+
+
   return(
-  <DataContext.Provider value={{books,handleClick}}>
+  <DataContext.Provider value={{books,handleClick , titems}}>
     {props.children}
   </DataContext.Provider>
   )
