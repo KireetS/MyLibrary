@@ -1,11 +1,12 @@
-import React, { useEffect, useState , useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import spinContext from "../Contexts/spin/spinContext";
 import { Spinner } from "./Spinner";
+import { Link } from "react-router-dom";
 export const Browse = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
   const [highestRated, setHighestRated] = useState([]);
-  const {spin , setSpinone , resetSpin} = useContext(spinContext)
+  const { spin, setSpinone, resetSpin } = useContext(spinContext);
   useEffect(() => {
     fetchBooks(
       "https://www.googleapis.com/books/v1/volumes?q=subject:fiction&orderBy=relevance&startIndex=0&maxResults=12"
@@ -23,10 +24,10 @@ export const Browse = () => {
 
   const fetchBooks = async (url) => {
     try {
-      setSpinone(true)
+      setSpinone(true);
       const response = await fetch(url);
       const data = await response.json();
-      resetSpin(false)
+      resetSpin(false);
       return data.items || [];
     } catch (error) {
       console.error("error fetching books", error);
@@ -82,15 +83,39 @@ export const Browse = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-6">
           {renderBooks(bestSellers)}
         </div>
+        <div className="mt-4">
+          <Link
+            className="text-blue-500 hover:underline"
+            to = "/browse/1"
+          >
+            See More
+          </Link>
+        </div>
 
         <h2 className="text-2xl font-semibold mb-4 mt-8">New Releases</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-6">
           {renderBooks(newReleases)}
         </div>
+        <div className="mt-4">
+          <Link
+            className="text-blue-500 hover:underline"
+            to = "/browse/2"
+          >
+            See More
+          </Link>
+        </div>
 
         <h2 className="text-2xl font-semibold mb-4 mt-8">Highest Rated</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-6">
           {renderBooks(highestRated)}
+        </div>
+        <div className="mt-4">
+          <Link
+            className="text-blue-500 hover:underline"
+            to = "/browse/3"
+          >
+            See More
+          </Link>
         </div>
       </div>
     </div>
